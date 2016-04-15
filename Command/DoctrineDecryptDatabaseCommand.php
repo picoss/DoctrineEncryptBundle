@@ -2,7 +2,7 @@
 
 namespace Ambta\DoctrineEncryptBundle\Command;
 
-use Ambta\DoctrineEncryptBundle\DependencyInjection\DoctrineEncryptExtension;
+use Ambta\DoctrineEncryptBundle\DependencyInjection\AmbtaDoctrineEncryptExtension;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -42,7 +42,7 @@ class DoctrineDecryptDatabaseCommand extends ContainerAwareCommand
         $annotationReader = new AnnotationReader();
 
         //Get list of supported encryptors
-        $supportedExtensions = DoctrineEncryptExtension::$supportedEncryptorClasses;
+        $supportedExtensions = AmbtaDoctrineEncryptExtension::$supportedEncryptorClasses;
 
         //If encryptor has been set use that encryptor else use default
         if($input->getArgument('encryptor')) {

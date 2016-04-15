@@ -245,19 +245,22 @@ class DoctrineEncryptSubscriber implements EventSubscriber {
                  */
                 $methodName = ucfirst($refProperty->getName());
 
-
                 /**
                  * If property is an normal value and contains the Encrypt tag, lets encrypt/decrypt that property
                  */
-                if ($this->annReader->getPropertyAnnotation($refProperty, self::ENCRYPTED_ANN_NAME)) {
-
+                if (($encryptedAnnotation = $this->annReader->getPropertyAnnotation($refProperty, self::ENCRYPTED_ANN_NAME))) {
+                    $salt = null;
+                    if ($encryptedAnnotation->salt && $reflectionClass->hasMethod('get' . $encryptedAnnotation->salt)) {
+                        $saltGetter = 'get' . $encryptedAnnotation->salt;
+                        $salt = $entity->$saltGetter();
+                    }
 
                     /**
                      * If it is public lets not use the getter/setter
                      */
                     if ($refProperty->isPublic()) {
                         $propName = $refProperty->getName();
-                        $entity->$propName = $this->encryptor->$encryptorMethod($refProperty->getValue());
+                        $entity->$propName = $this->encryptor->$encryptorMethod($refProperty->getValue(), $salt);
                     } else {
                         //If private or protected check if there is an getter/setter for the property, based on the $methodName
                         if ($reflectionClass->hasMethod($getter = 'get' . $methodName) && $reflectionClass->hasMethod($setter = 'set' . $methodName)) {
@@ -275,19 +278,26 @@ class DoctrineEncryptSubscriber implements EventSubscriber {
                              */
                             if($encryptorMethod == "decrypt") {
                                 if(!is_null($getInformation) and !empty($getInformation)) {
-                                    if(substr($getInformation, -5) == "<ENC>") {
+                                    try {
+                                        //if(substr($getInformation, -5) == "<ENC>") {
                                         $this->decryptCounter++;
-                                        $currentPropValue = $this->encryptor->decrypt(substr($getInformation, 0, -5));
+                                        //$currentPropValue = $this->encryptor->decrypt(substr($getInformation, 0, -5), $salt);
+                                        $currentPropValue = $this->encryptor->decrypt($getInformation, $salt);
                                         $entity->$setter($currentPropValue);
+                                        //}
                                     }
+                                    catch(\Exception $e) {}
                                 }
                             } else {
                                 if(!is_null($getInformation) and !empty($getInformation)) {
-                                    if(substr($entity->$getter(), -5) != "<ENC>") {
+                                    try {
+                                        //if(substr($entity->$getter(), -5) != "<ENC>") {
                                         $this->encryptCounter++;
-                                        $currentPropValue = $this->encryptor->encrypt($entity->$getter());
+                                        $currentPropValue = $this->encryptor->encrypt($entity->$getter(), $salt);
                                         $entity->$setter($currentPropValue);
+                                        //}
                                     }
+                                    catch(\Exception $e) {}
                                 }
                             }
                         }

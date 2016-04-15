@@ -4,10 +4,11 @@ namespace Ambta\DoctrineEncryptBundle\Encryptors;
 
 /**
  * Encryptor interface for encryptors
- * 
+ *
  * @author Victor Melnik <melnikvictorl@gmail.com>
  */
-interface EncryptorInterface {
+interface EncryptorInterface
+{
 
     /**
      * Must accept secret key for encryption
@@ -17,13 +18,15 @@ interface EncryptorInterface {
 
     /**
      * @param string $data Plain text to encrypt
+     * @param string $salt Salt
      * @return string Encrypted text
      */
-    public function encrypt($data);
+    public function encrypt($data, $salt = null);
 
     /**
      * @param string $data Encrypted text
+     * @param string $salt Salt
      * @return string Plain text
      */
-    public function decrypt($data);
+    public function decrypt($data, $salt = null);
 }

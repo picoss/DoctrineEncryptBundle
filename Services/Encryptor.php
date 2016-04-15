@@ -10,27 +10,56 @@ namespace Ambta\DoctrineEncryptBundle\Services;
 
 class Encryptor
 {
-    /** @var \Ambta\DoctrineEncryptBundle\Encryptors\EncryptorInterface */
+    /**
+     * @var \Ambta\DoctrineEncryptBundle\Encryptors\EncryptorInterface
+     */
     protected $encryptor;
 
+    /**
+     * Encryptor constructor.
+     * 
+     * @param string $encryptName
+     * @param string $key
+     */
     public function __construct($encryptName, $key)
     {
-
         $reflectionClass = new \ReflectionClass($encryptName);
-        $this->encryptor = $reflectionClass->newInstanceArgs( array(
-            $key
-        ));
+        $this->encryptor = $reflectionClass->newInstanceArgs(
+            array(
+                $key,
+            )
+        );
     }
 
-    public function getEncryptor() {
+    /**
+     * Get encryptor
+     * 
+     * @return \Ambta\DoctrineEncryptBundle\Encryptors\EncryptorInterface|object
+     */
+    public function getEncryptor()
+    {
         return $this->encryptor;
     }
 
-    public function decrypt($string) {
-        return $this->encryptor->decrypt($string);
+    /**
+     * Decrypt data
+     * 
+     * @param string $string
+     * @return string
+     */
+    public function decrypt($string, $salt = null)
+    {
+        return $this->encryptor->decrypt($string, $salt);
     }
 
-    public function encrypt($string) {
-        return $this->encryptor->encrypt($string);
+    /**
+     * Encrypt data
+     * 
+     * @param string $string
+     * @return string
+     */
+    public function encrypt($string, $salt = null)
+    {
+        return $this->encryptor->encrypt($string, $salt);
     }
 }
