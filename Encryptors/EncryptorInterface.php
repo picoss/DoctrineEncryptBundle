@@ -4,10 +4,11 @@ namespace Ambta\DoctrineEncryptBundle\Encryptors;
 
 /**
  * Encryptor interface for encryptors
- * 
+ *
  * @author Victor Melnik <melnikvictorl@gmail.com>
  */
-interface EncryptorInterface {
+interface EncryptorInterface
+{
 
     /**
      * Must accept secret key for encryption

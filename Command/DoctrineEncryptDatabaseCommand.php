@@ -2,7 +2,7 @@
 
 namespace Ambta\DoctrineEncryptBundle\Command;
 
-use Ambta\DoctrineEncryptBundle\DependencyInjection\DoctrineEncryptExtension;
+use Ambta\DoctrineEncryptBundle\DependencyInjection\AmbtaDoctrineEncryptExtension;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -10,12 +10,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-/**
- * Hello World command for demo purposes.
- *
- *
- * @author Marcel van Nuil <marcel@ambta.com>
- */
 class DoctrineEncryptDatabaseCommand extends ContainerAwareCommand
 {
 
@@ -42,7 +36,7 @@ class DoctrineEncryptDatabaseCommand extends ContainerAwareCommand
         $annotationReader = new AnnotationReader();
 
         //Get list of supported encryptors
-        $supportedExtensions = DoctrineEncryptExtension::$supportedEncryptorClasses;
+        $supportedExtensions = AmbtaDoctrineEncryptExtension::$supportedEncryptorClasses;
 
         //If encryptor has been set use that encryptor else use default
         if($input->getArgument('encryptor')) {
