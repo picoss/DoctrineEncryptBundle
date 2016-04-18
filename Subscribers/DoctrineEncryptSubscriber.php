@@ -2,6 +2,7 @@
 
 namespace Ambta\DoctrineEncryptBundle\Subscribers;
 
+use Doctrine\Common\Inflector\Inflector;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber;
@@ -256,11 +257,8 @@ class DoctrineEncryptSubscriber implements EventSubscriber {
                     $this->handleEmbeddedAnnotation($entity, $refProperty, $isEncryptOperation);
                     continue;
                 }
-                /**
-                 * If followed standards, method name is getPropertyName, the propertyName is lowerCamelCase
-                 * So just uppercase first character of the property, later on get and set{$methodName} wil be used
-                 */
-                $methodName = ucfirst($refProperty->getName());
+
+                $methodName = Inflector::classify($refProperty->getName());
 
                 /**
                  * If property is an normal value and contains the Encrypt tag, lets encrypt/decrypt that property
