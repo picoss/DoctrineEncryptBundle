@@ -19,7 +19,9 @@ class AmbtaDoctrineEncryptExtension extends Extension
 
     public static $supportedEncryptorClasses = array(
         'defuse' => 'Ambta\DoctrineEncryptBundle\Encryptors\DefuseEncryptor',
-        'defuse_password'=> 'Ambta\DoctrineEncryptBundle\Encryptors\DefusePasswordEncryptor');
+        'defuse_password'=> 'Ambta\DoctrineEncryptBundle\Encryptors\DefusePasswordEncryptor',
+        'defuse_split_key'=> 'Ambta\DoctrineEncryptBundle\Encryptors\DefuseSplitKeyEncryptor',
+    );
 
     /**
      * {@inheritDoc}
